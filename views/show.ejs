@@ -1,0 +1,23 @@
+<h1>Your Image</h1>
+<img src="<%=url%>" alt="">
+
+<p>Labels
+    <ol>
+
+        <%for (var i = 0; i < response.rawData.outputs[0].data.concepts.length; i++) {%>
+            <li>
+                <%=response.rawData.outputs[0].data.concepts[i].name%>
+            </li>
+            <%}%>
+
+    </ol>
+</p>
+<%for (var i = 0;imgdata.total >= 12 ? i < 12: i < imgdata.total; i++) {%>
+    <img src="<%=imgdata.hits[i].webformatURL%>" alt="">
+
+
+    <%}%>
+        <%if(imgdata.total==0){%>
+            <h1>Sorry no related images found</h1>
+            <%}%>
+                <a href="/form">Try again</a>
