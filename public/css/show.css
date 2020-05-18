@@ -1,0 +1,39 @@
+.jumbotron {
+    background-color: white;
+}
+
+.show {
+    margin-top: 75px;
+}
+
+.myimage {
+    height: 12rem;
+}
+
+.search {
+    width: 18rem;
+}
+
+.labels {
+    font-size: 20px;
+    background-color: yellowgreen;
+    border-radius: 5px;
+    border: 2px solid green;
+    color: white;
+    margin-left: 5px;
+    margin-right: 5px;
+    padding: 0 10px;
+    margin-top: 5px;
+}
+
+footer {
+    background-color: #91fa96;
+}
+
+.list-unstyled {
+    font-size: 25px;
+}
+
+.logo {
+    width: 200px;
+}

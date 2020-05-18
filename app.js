@@ -52,9 +52,10 @@ app.post("/form/url", nullQuery, (req, res) => {
                 query = query.substring(0, query.length - 1);
                 query = spaceToplus(query)
                 console.log(query)
-                res.redirect("/show")
+                res.redirect("/showAllResults")
             })
             .catch(err => {
+                res.redirect("back")
                 console.log(err);
             });
     })
@@ -64,39 +65,51 @@ app.post("/form/img", nullQuery, (req, res) => {
 
         var file = req.files.image
         cloudinary.uploader.upload(file.tempFilePath, (err, result) => {
-            console.log(err);
-            url = result.secure_url
-            imageProcessor.models.predict(Clarifai.GENERAL_MODEL, url)
-                .then(response => {
-                    for (var i = 0; i < response.rawData.outputs[0].data.concepts.length; i++) {
-                        console.log(response.rawData.outputs[0].data.concepts[i].name);
-                        if (i < 6) {
-                            query += response.rawData.outputs[0].data.concepts[i].name + "+"
+            if (err) {
+                console.log(err);
+                res.redirect("back")
+            } else {
+                url = result.secure_url
+                imageProcessor.models.predict(Clarifai.GENERAL_MODEL, url)
+                    .then(response => {
+                        for (var i = 0; i < response.rawData.outputs[0].data.concepts.length; i++) {
+                            console.log(response.rawData.outputs[0].data.concepts[i].name);
+                            if (i < 6) {
+                                query += response.rawData.outputs[0].data.concepts[i].name + "+"
+                            }
                         }
-                    }
-                    data = response
-                    query = query.substring(0, query.length - 1);
-                    query = spaceToplus(query)
-                    console.log(query)
-                    res.redirect("/show")
-                })
-                .catch(err => {
-                    console.log(err);
-                });
+                        data = response
+                        query = query.substring(0, query.length - 1);
+                        query = spaceToplus(query)
+                        console.log(query)
+                        res.redirect("/showAllResults")
+                    })
+                    .catch(err => {
+                        res.redirect("back")
+                        console.log(err);
+                    });
+
+
+            }
 
         })
 
     })
     //show route
-app.get("/show", (req, res) => {
+app.get("/showAllResults", (req, res) => {
 
         var imgurl = "https://pixabay.com/api/?key=16586857-850dcbf890ffd20bd9d88f5de&q=" + query
         request(imgurl, function(error, response, body) {
-            if (!error && response.statusCode == 200) {
-                var imgdata = JSON.parse(body)
-                console.log(imgdata);
-                res.render("show", { url: url, response: data, imgdata: imgdata })
+            if (error) {
+                console.log(error);
+                res.redirect("/form")
+            } else {
+                if (response.statusCode == 200) {
+                    var imgdata = JSON.parse(body)
+                    console.log(imgdata);
+                    res.render("show", { url: url, response: data, imgdata: imgdata })
 
+                }
             }
         })
 

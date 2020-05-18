@@ -1,10 +1,16 @@
-<h1>Form</h1>
-<form action="/form/img" method="POST" enctype="multipart/form-data">
-    <label for="exampleFormControlFile1">Image</label>
-    <input type="file" class="form-control-file" id="exampleFormControlFile1" name="image" accept="image/*">
-    <button>Submit</button>
-</form>
-<h1>OR</h1>
-<form action="/form/url" method="POST">
-    <input type="text" name="url" placeholder="Image URL">
-    <button>Submit</button></form>
+<%- include("partials/header") %>
+    <div class="container form d-flex flex-column justify-content-around align-items-center">
+        <h1 id="heading">Process your image</h1>
+        <form action="/form/img" method="POST" enctype="multipart/form-data" id="upload" class="d-flex align-items-center">
+
+
+            <input type="file" class="form-control-file form-control-lg" id="exampleFormControlFile1" name="image" accept="image/*">
+
+            <button class="btn btn-info" id="submit">Submit</button>
+        </form>
+        <h1>OR</h1>
+        <form action="/form/url" method="POST" class="d-flex align-items-center">
+            <input type="url" name="url" placeholder="Image URL" pattern="https://.*" class="form-control" id="urlinput">
+            <button class="btn btn-info urlsub">Submit</button></form>
+    </div>
+    <%- include("partials/footer") %>

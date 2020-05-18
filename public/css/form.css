@@ -1,0 +1,20 @@
+#heading {
+    text-align: center;
+    width: 100%;
+}
+
+#exampleFormControlFile1 {
+    width: fit-content;
+}
+
+#urlinput {
+    width: 20rem;
+}
+
+.form {
+    margin-top: 100px;
+}
+
+.urlsub {
+    margin-left: 4rem;
+}

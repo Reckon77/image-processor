@@ -1,23 +1,119 @@
-<h1>Your Image</h1>
-<img src="<%=url%>" alt="">
+<%- include("partials/header") %>
+    <div class="container show">
+        <div class="jumbotron">
+            <h1 class="text-center">Your Image</h1>
+            <div class="card">
+                <img class="card-img-top" src="<%=url%>" alt="Failed to load image">
+                <div class="card-body">
+                    <h3 class="card-title">Labels :</h3>
+                    <%for (var i = 0; i < response.rawData.outputs[0].data.concepts.length; i++) {%>
+                        <span class="labels">
+                            <%=response.rawData.outputs[0].data.concepts[i].name%>
+                        </span>
+                        <%}%>
+                </div>
+            </div>
 
-<p>Labels
-    <ol>
+        </div>
+        <h1 class="text-center my-3">Related Images</h1>
+        <div class="row">
+            <%for (var i = 0;imgdata.total >= 12 ? i < 12: i < imgdata.total; i++) {%>
+                <div class="col-lg-4 col-md-6 col-sm-6 col-xs-6">
+                    <div class="card mt-4 search">
+                        <img src="<%=imgdata.hits[i].webformatURL%>" alt="" class="card-img-top myimage">
+                        <div class="card-body">
+                            <p class="text-center">
+                                <a href="<%=imgdata.hits[i].largeImageURL%>" class="btn btn-outline-success">View full image</a>
+                            </p>
+                        </div>
+                    </div>
 
-        <%for (var i = 0; i < response.rawData.outputs[0].data.concepts.length; i++) {%>
-            <li>
-                <%=response.rawData.outputs[0].data.concepts[i].name%>
-            </li>
-            <%}%>
 
-    </ol>
-</p>
-<%for (var i = 0;imgdata.total >= 12 ? i < 12: i < imgdata.total; i++) {%>
-    <img src="<%=imgdata.hits[i].webformatURL%>" alt="">
+                </div>
+
+                <%}%>
+        </div>
 
 
-    <%}%>
+
+
+
+
+
         <%if(imgdata.total==0){%>
-            <h1>Sorry no related images found</h1>
+            <h3>Sorry no related images found</h3>
             <%}%>
-                <a href="/form">Try again</a>
+                <p class="mt-4 text-center">
+                    <a href="/form" class="btn btn-lg btn-outline-success">Try again</a>
+                </p>
+    </div>
+    <!-- Footer -->
+    <footer class="page-footer font-small blue pt-4">
+
+        <!-- Footer Links -->
+        <div class="container-fluid text-center text-md-left">
+
+            <!-- Grid row -->
+            <div class="row">
+
+                <!-- Grid column -->
+                <div class="col-md-6 mt-md-0 mt-3">
+
+                    <!-- Content -->
+                    <h5 class="text-uppercase">About the developer:</h5>
+                    <p>Hi, Thanks for using my application. I am Reckon Mazumdar, a Computer Science undergrad student of Assam Engineering College and a full-stack Web developer.</p>
+
+                </div>
+                <!-- Grid column -->
+
+                <hr class="clearfix w-100 d-md-none pb-3">
+
+                <!-- Grid column -->
+                <div class="col-md-3 mb-md-0 mb-3">
+
+                    <!-- Links -->
+                    <h5 class="text-uppercase">Get in touch</h5>
+
+                    <ul class="list-unstyled">
+                        <li>
+                            <a href="https://www.linkedin.com/in/reckon-mazumdar-49b8a7193/"><i class="fab fa-linkedin"></i></a>
+                        </li>
+                        <li>
+                            <a href="https://github.com/Reckon77"><i class="fab fa-github"></i></a>
+                        </li>
+
+                    </ul>
+
+                </div>
+                <!-- Grid column -->
+                <div class="col-md-3 mb-md-0 mb-3">
+
+                    <!-- Links -->
+                    <h5 class="text-uppercase">All images are provided by</h5>
+
+                    <ul class="list-unstyled">
+                        <li>
+                            <img src="/img/logo.png" alt="" class="logo">
+                        </li>
+                    </ul>
+
+                </div>
+
+                <!-- Grid column -->
+
+                <!-- Grid column -->
+
+            </div>
+            <!-- Grid row -->
+
+        </div>
+        <!-- Footer Links -->
+
+        <!-- Copyright -->
+        <div class="footer-copyright text-center py-3">© 2020 Copyright: Reckon Mazumdar
+        </div>
+        <!-- Copyright -->
+
+    </footer>
+    <!-- Footer -->
+    <%- include("partials/footer") %>
