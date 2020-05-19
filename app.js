@@ -136,7 +136,7 @@ app.get("/showAllResults", checkData, (req, res) => {
                         res.redirect("/showAllResults")
 
                     } else {
-                        console.log(imgdata);
+                        // console.log(imgdata);
                         res.render("show", { url: url, response: data, imgdata: imgdata })
                     }
 

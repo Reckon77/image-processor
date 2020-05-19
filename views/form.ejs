@@ -1,22 +1,22 @@
 <%- include("partials/header") %>
     <div class="container form d-flex flex-column justify-content-around align-items-center">
-        <h1 id="heading">Process your image</h1>
+        <h1 class="heading">Process your image</h1>
         <% if ( message.length > 0 ) { %>
             <div class="alert alert-danger" role="alert">
                 <%= message %>
             </div>
             <% } %>
-                <form action="/form/img" method="POST" enctype="multipart/form-data" id="upload" class="d-flex align-items-center">
+                <form action="/form/img" method="POST" enctype="multipart/form-data" id="upload" class="d-flex flex-column align-items-center">
 
 
-                    <input type="file" class="form-control-file form-control-lg" id="exampleFormControlFile1" name="image" accept="image/*">
+                    <input type="file" class="form-control-file mt-4" id="exampleFormControlFile1" name="image" accept="image/*" required>
 
-                    <button class="btn btn-success" id="submit">Submit</button>
+                    <button class="btn btn-success mt-2" id="submit">Submit</button>
                 </form>
-                <h1>OR</h1>
-                <form action="/form/url" method="POST" class="d-flex align-items-center">
-                    <input type="url" name="url" placeholder="Image URL" class="form-control" id="urlinput" pattern="https://.*">
-                    <button class="btn btn-success urlsub">Submit</button></form>
+                <h1 class="heading">OR</h1>
+                <form action="/form/url" method="POST" class="d-flex flex-column align-items-center">
+                    <input type="url" name="url" placeholder="Image URL : 'https://xx/...'" class="form-control" id="urlinput" pattern="https://.*" required>
+                    <button class="btn btn-success mt-2">Submit</button></form>
     </div>
 
 

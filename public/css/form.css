@@ -1,6 +1,7 @@
-#heading {
+.heading {
     text-align: center;
     width: 100%;
+    font-size: 30px;
 }
 
 #exampleFormControlFile1 {
@@ -13,8 +14,4 @@
 
 .form {
     margin-top: 100px;
-}
-
-.urlsub {
-    margin-left: 4rem;
 }
