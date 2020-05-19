@@ -5,16 +5,23 @@ const req = require("request"),
     fileupload = require("express-fileupload"),
     Clarifai = require('clarifai'),
     request = require("request"),
+    flash = require("connect-flash"),
     cloudinary = require("cloudinary").v2
     //required variables
 let url, query = '',
-    data, searchResults //for storing the url
+    data, queryLength //for storing the url
     //configuring app
 const app = express()
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(express.static("public"))
 app.set("view engine", "ejs")
+app.use(flash())
     //cloudinary and express file upload cofig for file upload
+app.use(require("express-session")({
+    secret: "My name is slim shady",
+    resave: false,
+    saveUninitialized: false
+}))
 app.use(fileupload({
     useTempFiles: true,
     limits: { fileSize: 10485760 }
@@ -34,7 +41,7 @@ app.get("/", (req, res) => {
     })
     //Form Routes
 app.get("/form", (req, res) => {
-        res.render("form")
+        res.render("form", { message: req.flash("error") })
     })
     //form image url post route
 app.post("/form/url", nullQuery, (req, res) => {
@@ -55,7 +62,9 @@ app.post("/form/url", nullQuery, (req, res) => {
                 res.redirect("/showAllResults")
             })
             .catch(err => {
-                res.redirect("back")
+                //flash
+                req.flash("error", "Sorry, something went wrong please try again")
+                res.redirect("/form")
                 console.log(err);
             });
     })
@@ -67,7 +76,9 @@ app.post("/form/img", nullQuery, (req, res) => {
         cloudinary.uploader.upload(file.tempFilePath, (err, result) => {
             if (err) {
                 console.log(err);
-                res.redirect("back")
+                //flash
+                req.flash("error", "Sorry, something went wrong please try again")
+                res.redirect("/form")
             } else {
                 url = result.secure_url
                 imageProcessor.models.predict(Clarifai.GENERAL_MODEL, url)
@@ -85,7 +96,9 @@ app.post("/form/img", nullQuery, (req, res) => {
                         res.redirect("/showAllResults")
                     })
                     .catch(err => {
-                        res.redirect("back")
+                        //flash
+                        req.flash("error", "Sorry, something went wrong please try again")
+                        res.redirect("/form")
                         console.log(err);
                     });
 
@@ -102,11 +115,15 @@ app.get("/showAllResults", checkData, (req, res) => {
         request(imgurl, function(error, response, body) {
             if (error) {
                 console.log(error);
+                //flash
+                req.flash("error", "Sorry, something went wrong please try again")
                 res.redirect("/form")
             } else {
                 if (response.statusCode == 200) {
                     var imgdata = JSON.parse(body)
-                    if (imgdata.totalHits < 3 && query.split("+").length - 1 > 3) {
+                    queryLength = query.split("+").length - 1
+                    console.log(queryLength);
+                    if (imgdata.totalHits == 0 && queryLength > 4) {
                         query = ""
                         for (var i = 0; i < data.rawData.outputs[0].data.concepts.length; i++) {
                             if (i < 3) {
@@ -137,6 +154,8 @@ function nullQuery(req, res, next) {
 
 function checkData(req, res, next) {
     if (data == undefined) {
+        //flash
+        req.flash("error", "Sorry, something went wrong please try again")
         res.redirect("/form")
     } else {
         next()
