@@ -96,7 +96,7 @@ app.post("/form/img", nullQuery, (req, res) => {
 
     })
     //show route
-app.get("/showAllResults", (req, res) => {
+app.get("/showAllResults", checkData, (req, res) => {
 
         var imgurl = "https://pixabay.com/api/?key=16586857-850dcbf890ffd20bd9d88f5de&q=" + query
         request(imgurl, function(error, response, body) {
@@ -106,8 +106,22 @@ app.get("/showAllResults", (req, res) => {
             } else {
                 if (response.statusCode == 200) {
                     var imgdata = JSON.parse(body)
-                    console.log(imgdata);
-                    res.render("show", { url: url, response: data, imgdata: imgdata })
+                    if (imgdata.totalHits < 3 && query.split("+").length - 1 > 3) {
+                        query = ""
+                        for (var i = 0; i < data.rawData.outputs[0].data.concepts.length; i++) {
+                            if (i < 3) {
+                                query += data.rawData.outputs[0].data.concepts[i].name + "+"
+                            }
+                        }
+                        query = query.substring(0, query.length - 1);
+                        query = spaceToplus(query)
+                        console.log(query);
+                        res.redirect("/showAllResults")
+
+                    } else {
+                        console.log(imgdata);
+                        res.render("show", { url: url, response: data, imgdata: imgdata })
+                    }
 
                 }
             }
@@ -119,6 +133,14 @@ app.get("/showAllResults", (req, res) => {
 function nullQuery(req, res, next) {
     query = ""
     next()
+}
+
+function checkData(req, res, next) {
+    if (data == undefined) {
+        res.redirect("/form")
+    } else {
+        next()
+    }
 }
 
 function spaceToplus(word) {
